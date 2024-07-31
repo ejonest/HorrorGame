@@ -1,15 +1,49 @@
-[gd_scene load_steps=5 format=3 uid="uid://bfomdf5iijaj0"]
+[gd_scene load_steps=15 format=3 uid="uid://bfomdf5iijaj0"]
 
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="1_je870"]
 [ext_resource type="Resource" path="res://TerrainData/data.hterrain" id="2_objf1"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="3_njwoc"]
+[ext_resource type="Texture2D" uid="uid://dyeawxrqv4dgv" path="res://main_slot0_albedo_bump.png" id="4_r4lwl"]
+[ext_resource type="Texture2D" uid="uid://djtefe4ufuqw8" path="res://main_slot0_normal_roughness.png" id="5_lr1xv"]
+[ext_resource type="Script" path="res://CharacterBody3D.cs" id="6_8fgjv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xsnwx"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_pbaoq"]
+sky_material = SubResource("ProceduralSkyMaterial_xsnwx")
+
+[sub_resource type="Environment" id="Environment_uo0kn"]
+background_mode = 2
+sky = SubResource("Sky_pbaoq")
+ambient_light_color = Color(0.215686, 0.317647, 0.462745, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 2.0
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+volumetric_fog_enabled = true
 
 [sub_resource type="Resource" id="Resource_y44rr"]
 script = ExtResource("3_njwoc")
 mode = 0
-textures = [[], []]
+textures = [[ExtResource("4_r4lwl")], [ExtResource("5_lr1xv")]]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3s2nn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lvvq7"]
+radius = 0.570891
+height = 2.14799
+
+[sub_resource type="BoxMesh" id="BoxMesh_ojxa7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lkq61"]
 
 [node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uo0kn")
 
 [node name="HTerrain" type="Node3D" parent="."]
 script = ExtResource("1_je870")
@@ -30,3 +64,28 @@ shader_params/u_ground_uv_scale = 20
 shader_params/u_depth_blending = true
 shader_params/u_triplanar = null
 shader_params/u_tile_reduction = null
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35075, 0)
+script = ExtResource("6_8fgjv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_3s2nn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_lvvq7")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.983207, 0.182493, 0, -0.182493, 0.983207, 0, 1.02582, 3.23679)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96198, 0, 0)
+
+[node name="floor" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(5, 0, 0, 0, 0.25, 0, 0, 0, 5, 0, 0.676498, 0)
+mesh = SubResource("BoxMesh_ojxa7")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(5, 0, 0, 0, 0.26, 0, 0, 0, 5, 0, 0.676498, 0)
+shape = SubResource("BoxShape3D_lkq61")
