@@ -3,13 +3,29 @@ using System;
 
 public partial class CharacterBody3D : Godot.CharacterBody3D
 {
-	public const float Speed = 5.0f;
+	private Camera3D camera;
+	public float Speed = 5.0f;
 	public const float JumpVelocity = 4.5f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-	public override void _PhysicsProcess(double delta)
+    public override void _Ready()
+    {
+		Input.MouseMode = Input.MouseModeEnum.Captured;
+
+        camera = GetNode<Camera3D>("Player/Camera3D");
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventMouseMotion mouseMotion) {
+			RotateY(-mouseMotion.Relative.X * 0.002f);
+			camera.RotateX(mouseMotion.Relative.Y * 0.002f);
+		}
+    }
+
+    public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
 
@@ -20,6 +36,17 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
 			velocity.Y = JumpVelocity;
+
+		if (Input.IsActionPressed("Shift") && Input.IsActionPressed("ui_up") && IsOnFloor()) 
+		{
+			Speed = 10.0f;
+			// GD.Print("SHIFT: ", Speed);
+		} 
+		else 
+		{
+			Speed = 5.0f;
+			// GD.Print("NotShift: ", Speed);
+		}
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.

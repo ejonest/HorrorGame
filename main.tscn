@@ -1,11 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bfomdf5iijaj0"]
+[gd_scene load_steps=11 format=3 uid="uid://bfomdf5iijaj0"]
 
+[ext_resource type="Environment" uid="uid://cdc6pv3xk0cgb" path="res://Assets/HorrorEnv.tres" id="1_8okhi"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="1_je870"]
 [ext_resource type="Resource" path="res://TerrainData/data.hterrain" id="2_objf1"]
 [ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="3_njwoc"]
 [ext_resource type="Texture2D" uid="uid://dyeawxrqv4dgv" path="res://main_slot0_albedo_bump.png" id="4_r4lwl"]
 [ext_resource type="Texture2D" uid="uid://djtefe4ufuqw8" path="res://main_slot0_normal_roughness.png" id="5_lr1xv"]
-[ext_resource type="Script" path="res://CharacterBody3D.cs" id="6_8fgjv"]
+[ext_resource type="Script" path="res://Scripts/CharacterBody3D.cs" id="6_8fgjv"]
 
 [sub_resource type="Resource" id="Resource_y44rr"]
 script = ExtResource("3_njwoc")
@@ -17,6 +18,9 @@ textures = [[ExtResource("4_r4lwl")], [ExtResource("5_lr1xv")]]
 [sub_resource type="CylinderMesh" id="CylinderMesh_he7d4"]
 
 [node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_8okhi")
 
 [node name="HTerrain" type="Node3D" parent="."]
 script = ExtResource("1_je870")
@@ -39,7 +43,7 @@ shader_params/u_triplanar = null
 shader_params/u_tile_reduction = Vector4(1, 1, 1, 1)
 
 [node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.7783, -2.42751)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.62809, -2.42751)
 script = ExtResource("6_8fgjv")
 
 [node name="PlayerBody" type="CollisionShape3D" parent="Player"]
@@ -50,9 +54,10 @@ shape = SubResource("CapsuleShape3D_7ddg1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.73008, 0)
 
 [node name="FlashLightMesh" type="MeshInstance3D" parent="Player/Camera3D"]
-transform = Transform3D(0.4, 0, 0, 0, -4.37114e-09, -0.4, 0, 0.1, -1.74846e-08, 0.5, -0.3, -0.3)
+transform = Transform3D(0.4, 0, 0, 0, 0.0173648, -0.393923, 0, 0.0984808, 0.0694593, 0.5, -0.3, -0.3)
 mesh = SubResource("CylinderMesh_he7d4")
 skeleton = NodePath("../..")
 
 [node name="FlashLight" type="SpotLight3D" parent="Player/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.3, -0.3)
+light_energy = 3.0

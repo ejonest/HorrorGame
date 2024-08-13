@@ -1,0 +1,12 @@
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://cdc6pv3xk0cgb"]
+
+[sub_resource type="Sky" id="Sky_ks3ei"]
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_ks3ei")
+ambient_light_color = Color(0.247059, 0.458824, 0.588235, 1)
+ambient_light_energy = 5.0
+fog_enabled = true
+fog_light_color = Color(0.431373, 0.572549, 0.662745, 1)
+fog_density = 0.06
